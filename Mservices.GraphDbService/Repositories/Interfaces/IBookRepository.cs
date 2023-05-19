@@ -7,8 +7,8 @@ namespace Mservices.GraphDbService.Repositories.Interfaces;
 public interface IBookRepository : IBaseRepository
 {
     Task<Book> Add(Book book);
-    Task<OneOf<Success<Book>, NotFound>> GetById(Guid id);
+    Task<Book?> GetById(int id);
     Task<Book> Update(Book book);
     Task<List<Book>> GetAll();
-    Task<OneOf<Success,NotFound>> DeleteById(Guid id);
+    Task<bool> DeleteById(int id);
 }

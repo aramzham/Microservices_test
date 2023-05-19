@@ -7,6 +7,28 @@ using OneOf.Types;
 
 namespace Mservices.GraphDbService.Repositories;
 
+public class A
+{
+    protected string B { get; private set; }
+
+    private List<string> _l = new List<string>();
+    
+    private int[] C(int[] nums, int k)
+    {
+        var shift = k % nums.Length;
+        if (shift == 0)
+            return nums;
+        
+        var newArray = new int[nums.Length];
+        for (int i = 0; i < nums.Length; i++)
+        {
+            newArray[(i + k) % nums.Length] = nums[i];
+        }
+
+        return newArray;
+    }
+}
+
 public class BookRepository : BaseRepository, IBookRepository
 {
     public BookRepository(IDriver driver) : base(driver)
@@ -30,7 +52,7 @@ public class BookRepository : BaseRepository, IBookRepository
         return result;
     }
 
-    public Task<OneOf<Success<Book>, NotFound>> GetById(Guid id)
+    public Task<Book?> GetById(int id)
     {
         throw new NotImplementedException();
     }
@@ -45,7 +67,7 @@ public class BookRepository : BaseRepository, IBookRepository
         throw new NotImplementedException();
     }
 
-    public Task<OneOf<Success, NotFound>> DeleteById(Guid id)
+    public Task<bool> DeleteById(int id)
     {
         throw new NotImplementedException();
     }

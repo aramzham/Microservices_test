@@ -1,4 +1,5 @@
-﻿using MapsterMapper;
+﻿using HashidsNet;
+using MapsterMapper;
 using Mservices.GraphDbService.Data;
 using Mservices.GraphDbService.Models;
 using Mservices.GraphDbService.Repositories.Interfaces;
@@ -14,28 +15,33 @@ public class BookService : IBookService
     private readonly BookRequestValidator _bookRequestValidator;
     private readonly IBookRepository _bookRepository;
     private readonly IMapper _mapper;
-    
-    public BookService(BookRequestValidator bookRequestValidator, IBookRepository bookRepository, IMapper mapper)
+    private readonly IHashids _hashids;
+
+    public BookService(BookRequestValidator bookRequestValidator, IBookRepository bookRepository, IMapper mapper, IHashids hashids)
     {
         _bookRequestValidator = bookRequestValidator;
         _bookRepository = bookRepository;
         _mapper = mapper;
+        _hashids = hashids;
     }
 
-    public async Task<OneOf<Success<Book>, ValidationFailed>> Create(BookCreateRequest book)
+    public async Task<OneOf<Book, ValidationFailed>> Create(BookCreateRequest createRequest)
     {
-        var validationResult = await _bookRequestValidator.ValidateAsync(book);
+        var validationResult = await _bookRequestValidator.ValidateAsync(createRequest);
         if (!validationResult.IsValid)
             return new ValidationFailed(validationResult.Errors);
 
-        var createRequest = _mapper.Map<Book>(book);
-        var result = await _bookRepository.Add(createRequest);
-        return new Success<Book>(result);
+        var book = _mapper.Map<Book>(createRequest);
+        return await _bookRepository.Add(book);
     }
 
-    public Task<OneOf<Success<Book>, NotFound>> GetById(Guid id)
+    public async Task<OneOf<Book, NotFound>> GetById(int id)
     {
-        return _bookRepository.GetById(id);
+        var book = await _bookRepository.GetById(id);
+        if (book is null)
+            return new NotFound();
+        
+        return book;
     }
 
     public Task<List<Book>> GetAll()
@@ -50,7 +56,7 @@ public class BookService : IBookService
             return new ValidationFailed(validationResult.Errors);
 
         var bookInDbResponse = await _bookRepository.GetById(book.Id);
-        if (bookInDbResponse.IsT1)
+        if (bookInDbResponse is null)
             return new NotFound();
 
         var updateRequest = _mapper.Map<Book>(book);
@@ -58,8 +64,9 @@ public class BookService : IBookService
         return updatedBook;
     }
 
-    public Task<OneOf<Success, NotFound>> DeleteById(Guid id)
+    public async Task<OneOf<Success, NotFound>> DeleteById(int id)
     {
-        return _bookRepository.DeleteById(id);
+        var isDeleted = await _bookRepository.DeleteById(id);
+        return isDeleted ? new Success() : new NotFound();
     }
 }

@@ -8,9 +8,9 @@ namespace Mservices.GraphDbService.Services.Interfaces;
 
 public interface IBookService
 {
-    Task<OneOf<Success<Book>, ValidationFailed>> Create(BookCreateRequest book);
-    Task<OneOf<Success<Book>, NotFound>> GetById(Guid id);
+    Task<OneOf<Book, ValidationFailed>> Create(BookCreateRequest createRequest);
+    Task<OneOf<Book, NotFound>> GetById(int id);
     Task<List<Book>> GetAll();
     Task<OneOf<Book, NotFound, ValidationFailed>> Update(BookUpdateRequest book);
-    Task<OneOf<Success, NotFound>> DeleteById(Guid id);
+    Task<OneOf<Success, NotFound>> DeleteById(int id);
 }

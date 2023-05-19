@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HashidsNet;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Mservices.GraphDbService.Models;
 using Mservices.GraphDbService.Services.Interfaces;
 
@@ -9,18 +11,22 @@ public static class WebApplicationExtensions
     public static void MapBookEndpoints(this WebApplication app)
     {
         app.MapPost("/book", Add);
-        app.MapGet("/book/{id:guid}", GetById);
+        app.MapGet("/book/{id}", GetById);
         app.MapGet("/book", GetAll);
         app.MapPut("/book/{id:guid}", Update);
-        app.MapDelete("/book/{id:guid}", DeleteById);
+        app.MapDelete("/book/{id}", DeleteById);
     }
 
-    private static async Task<IResult> DeleteById(Guid id, IBookService bookService)
+    private static async Task<IResult> DeleteById(string id, IBookService bookService, IHashids hashids)
     {
-        var result = await bookService.DeleteById(id);
+        var rawId = hashids.Decode(id);
+        if (rawId.Length == 0)
+            return Results.NotFound();
+
+        var result = await bookService.DeleteById(rawId[0]);
 
         return result.Match(
-            Results.Ok, 
+            Results.Ok,
             Results.NotFound);
     }
 
@@ -31,7 +37,7 @@ public static class WebApplicationExtensions
 
         return result.Match(
             Results.Ok,
-            _ => Results.NotFound(),
+            Results.NotFound,
             failed => Results.BadRequest(failed.Errors));
     }
 
@@ -44,13 +50,18 @@ public static class WebApplicationExtensions
             failed => Results.BadRequest(failed.Errors));
     }
 
-    internal static async Task<IResult> GetById(Guid id, IBookService bookService)
+    [Authorize]
+    internal static async Task<IResult> GetById([FromRoute] string id, IBookService bookService, IHashids hashids)
     {
-        var result = await bookService.GetById(id);
+        var rawId = hashids.Decode(id);
+        if (rawId.Length == 0)
+            return Results.NotFound();
+
+        var result = await bookService.GetById(rawId[0]);
 
         return result.Match(
-            Results.Ok,
-            _ => Results.NotFound());
+            b => Results.Ok(b.MapToResponse(hashids.Encode)),
+            Results.NotFound);
     }
 
     internal static async Task<IResult> GetAll(IBookService bookService)
