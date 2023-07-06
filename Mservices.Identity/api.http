@@ -1,0 +1,15 @@
+﻿POST https://localhost:7108/token
+Content-Type: application/json
+
+{
+  "userid":"01721f0a-e750-42f6-8bb3-c5c0517cf46b",
+  "email":"aramo90@spaces.ru",
+  "customClaims":{
+    "admin":true
+  }
+}
+
+###
+
+GET https://localhost:7153/book/adsjfalsk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3YTljYTdkNS03ZGVhLTQ2YjAtODM0ZS1hMzZlODNmZDZkMWYiLCJzdWIiOiJhcmFtbzkwQHNwYWNlcy5ydSIsImVtYWlsIjoiYXJhbW85MEBzcGFjZXMucnUiLCJ1c2VyaWQiOiIwMTcyMWYwYS1lNzUwLTQyZjYtOGJiMy1jNWMwNTE3Y2Y0NmIiLCJhZG1pbiI6dHJ1ZSwibmJmIjoxNjg0NjAzNDgxLCJleHAiOjE2ODQ2MzIyODEsImlhdCI6MTY4NDYwMzQ4MSwiaXNzIjoiaHR0cHM6Ly9teS5pZHNlcnZlci5jb20iLCJhdWQiOiJodHRwczovL215LndlYnNpdGUuY29tIn0.17Sk_WYdstIE10j3H57ZR2Xk-9XzOHF0JlwXJxCZ18Y

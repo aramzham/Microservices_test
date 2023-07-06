@@ -1,6 +1,7 @@
 ﻿using HashidsNet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Mservices.GraphDbService.Identity;
 using Mservices.GraphDbService.Models;
 using Mservices.GraphDbService.Services.Interfaces;
 
@@ -11,7 +12,7 @@ public static class WebApplicationExtensions
     public static void MapBookEndpoints(this WebApplication app)
     {
         app.MapPost("/book", Add);
-        app.MapGet("/book/{id}", GetById);
+        app.MapGet("/book/{id}", GetById).RequireAuthorization(IdentityData.AdminUserPolicyName);
         app.MapGet("/book", GetAll);
         app.MapPut("/book/{id:guid}", Update);
         app.MapDelete("/book/{id}", DeleteById);
@@ -50,7 +51,9 @@ public static class WebApplicationExtensions
             failed => Results.BadRequest(failed.Errors));
     }
 
-    [Authorize]
+    // for minimal apis the better approach is extension method
+    // [Authorize(Policy = IdentityData.AdminUserPolicyName)]
+    // [RequiresClaim(IdentityData.AdminUserClaimName, "true")]
     internal static async Task<IResult> GetById([FromRoute] string id, IBookService bookService, IHashids hashids)
     {
         var rawId = hashids.Decode(id);
@@ -64,6 +67,7 @@ public static class WebApplicationExtensions
             Results.NotFound);
     }
 
+    [AllowAnonymous]
     internal static async Task<IResult> GetAll(IBookService bookService)
     {
         var result = await bookService.GetAll();

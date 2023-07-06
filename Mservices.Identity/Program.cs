@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Mservices.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -40,10 +41,10 @@ app.MapPost("/token", ([FromBody] TokenGenerationRequest request, IConfiguration
     var tokenDescriptor = new SecurityTokenDescriptor()
     {
         Subject = new ClaimsIdentity(claims),
-        Expires = DateTime.UtcNow.Add(TokenLifetime),
+        Expires = DateTime.UtcNow.Add(TimeSpan.FromHours(8)), // very long time
         Issuer = "https://my.idserver.com",
         Audience = "https://my.website.com",
-        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.Sha256)
+        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
     };
 
     var token = tokenHandler.CreateToken(tokenDescriptor);
