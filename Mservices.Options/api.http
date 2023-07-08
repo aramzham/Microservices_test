@@ -3,3 +3,7 @@
 ###
 
 GET https://localhost:2023/ioptionsSnapshot
+
+###
+
+GET https://localhost:2023/ioptionsmonitor

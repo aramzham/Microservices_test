@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mservices.Identity", "Mserv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mservices.Options", "Mservices.Options\Mservices.Options.csproj", "{0E87D344-EF30-4366-BF96-9CACFD6DBBE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{B2D36F85-713A-4F04-922F-E4C1EA581999}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,9 +36,5 @@ Global
 		{0E87D344-EF30-4366-BF96-9CACFD6DBBE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E87D344-EF30-4366-BF96-9CACFD6DBBE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E87D344-EF30-4366-BF96-9CACFD6DBBE0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B2D36F85-713A-4F04-922F-E4C1EA581999}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B2D36F85-713A-4F04-922F-E4C1EA581999}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B2D36F85-713A-4F04-922F-E4C1EA581999}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B2D36F85-713A-4F04-922F-E4C1EA581999}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
