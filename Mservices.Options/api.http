@@ -7,3 +7,23 @@ GET https://localhost:2023/ioptionsSnapshot
 ###
 
 GET https://localhost:2023/ioptionsmonitor
+
+###
+
+GET https://localhost:2023/test/usermustbeknown
+
+###
+
+GET https://localhost:2023/test/logresource
+
+###
+
+GET https://localhost:2023/test/logaction
+
+###
+
+GET https://localhost:2023/test/logexception
+
+###
+
+GET https://localhost:2023/test/logresult
